@@ -2,7 +2,7 @@
   "name": "All-Media-Downloader",
   "description": "Telegram Bot to Upload URLs to Telegram as File and Video.",
   "logo": "https://telegra.ph/file/e8295bbd58a696102c994.jpg",
-  "repository": "https://github.com/Ansaku/All-Media-Downloader",
+  "repository": "https://github.com/surbiks/mediadlbot",
   "keywords": [
     "telegram",
     "best",
@@ -16,9 +16,8 @@
     "remote",
     "uploader"
   ],
-  "success_url": "https://t.me/allmediadwnlderbot",
-  "website": "https://github.com/Ansaku",
-  "repository": "https://github.com/Ansaku/All-Media-Downloader",
+  "success_url": "",
+  "website": "https://github.com/surbiks/mediadlbot",
   "env": {
     "WEBHOOK": {
       "description": "Setting this to ANYTHING will enable webhooks when in env mode",

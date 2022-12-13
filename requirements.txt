@@ -1,5 +1,7 @@
 aiohttp
 aiofiles
+python-dotenv
+peewee
 beautifulsoup4
 hachoir
 numpy
