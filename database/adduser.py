@@ -1,6 +1,6 @@
 from pyrogram import Client
-from database.access import clinton
 from pyrogram.types import Message
+from database.access import clinton
 
 
 async def AddUser(bot: Client, update: Message):
