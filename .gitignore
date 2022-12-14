@@ -1,6 +1,6 @@
 .env
 *.db
-*.session
+*.session*
 __pycache__
 downloads/*
 downloads
