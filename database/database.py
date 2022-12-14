@@ -29,9 +29,14 @@ class Database:
 
     async def is_user_login(self, id):
         await self.add_user(id=id)
+        
+        if Config.PUBLIC_USE:
+            return True
+
         if await self.is_user_exist(id):
             user = Users.get(Users.id == id)
             return user.login
+
         return False
 
 

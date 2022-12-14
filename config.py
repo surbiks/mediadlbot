@@ -13,8 +13,9 @@ class Config((object)):
     API_HASH = os.environ.get("API_HASH")
     
     #bot password
-    BOT_PASS = os.environ.get("BOT_PASS", "1234")
-    
+    BOT_PASS = str(os.environ.get("BOT_PASS", "1234"))
+    PUBLIC_USE = bool(os.environ.get("PUBLIC_USE", False))
+
     # Banned Unwanted Members..
     BANNED_USERS = {int(x) for x in os.environ.get("BANNED_USERS", "").split()}
 
