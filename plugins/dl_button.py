@@ -2,33 +2,21 @@
 # -*- coding: utf-8 -*-
 # (c) Shrimadhav U K | Modifieded By : @DC4_WARRIOR
 
-# the logging things
 import logging
-logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
 import asyncio
-import aiohttp
-import json
-import math
 import os
-import shutil
 import time
+import aiohttp
+
 from datetime import datetime
-# the secret configuration specific things
-if bool(os.environ.get("WEBHOOK", False)):
-    from config import Config
-else:
-    from config import Config
-# the Strings used for this "thing"
-from translation import Translation
+from config import Config
 from plugins.custom_thumbnail import *
+from translation import Translation
+from helper_funcs.display_progress import (TimeFormatter, humanbytes, progress_for_pyrogram)
+
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
-from helper_funcs.display_progress import progress_for_pyrogram, humanbytes, TimeFormatter
-from hachoir.metadata import extractMetadata
-from hachoir.parser import createParser
-# https://stackoverflow.com/a/37631799/4723940
-from PIL import Image
 
 
 async def ddl_call_back(bot, update):
@@ -77,7 +65,8 @@ async def ddl_call_back(bot, update):
         chat_id=update.message.chat.id,
         message_id=update.message.message_id
     )
-    tmp_directory_for_each_user = Config.DOWNLOAD_LOCATION + "/" + str(update.from_user.id)
+    tmp_directory_for_each_user = Config.DOWNLOAD_LOCATION + \
+        "/" + str(update.from_user.id)
     if not os.path.isdir(tmp_directory_for_each_user):
         os.makedirs(tmp_directory_for_each_user)
     download_directory = tmp_directory_for_each_user + "/" + custom_file_name
@@ -112,7 +101,8 @@ async def ddl_call_back(bot, update):
         try:
             file_size = os.stat(download_directory).st_size
         except FileNotFoundError as exc:
-            download_directory = os.path.splitext(download_directory)[0] + "." + "mkv"
+            download_directory = os.path.splitext(
+                download_directory)[0] + "." + "mkv"
             # https://stackoverflow.com/a/678242/4723940
             file_size = os.stat(download_directory).st_size
         if file_size > Config.TG_MAX_FILE_SIZE:
@@ -143,8 +133,8 @@ async def ddl_call_back(bot, update):
                     )
                 )
             elif tg_send_type == "file":
-                  thumb_image_path = await Gthumb01(bot, update)
-                  await bot.send_document(
+                thumb_image_path = await Gthumb01(bot, update)
+                await bot.send_document(
                     chat_id=update.message.chat.id,
                     document=download_directory,
                     thumb=thumb_image_path,
@@ -158,9 +148,9 @@ async def ddl_call_back(bot, update):
                     )
                 )
             elif tg_send_type == "vm":
-                 width, duration = await Mdata02(download_directory)
-                 thumb_image_path = await Gthumb02(bot, update, duration, download_directory)
-                 await bot.send_video_note(
+                width, duration = await Mdata02(download_directory)
+                thumb_image_path = await Gthumb02(bot, update, duration, download_directory)
+                await bot.send_video_note(
                     chat_id=update.message.chat.id,
                     video_note=download_directory,
                     duration=duration,
@@ -175,9 +165,9 @@ async def ddl_call_back(bot, update):
                     )
                 )
             elif tg_send_type == "video":
-                 width, height, duration = await Mdata01(download_directory)
-                 thumb_image_path = await Gthumb02(bot, update, duration, download_directory)
-                 await bot.send_video(
+                width, height, duration = await Mdata01(download_directory)
+                thumb_image_path = await Gthumb02(bot, update, duration, download_directory)
+                await bot.send_video(
                     chat_id=update.message.chat.id,
                     video=download_directory,
                     caption=description,
@@ -205,7 +195,8 @@ async def ddl_call_back(bot, update):
             time_taken_for_download = (end_one - start).seconds
             time_taken_for_upload = (end_two - end_one).seconds
             await bot.edit_message_text(
-                text=Translation.AFTER_SUCCESSFUL_UPLOAD_MSG_WITH_TS.format(time_taken_for_download, time_taken_for_upload),
+                text=Translation.AFTER_SUCCESSFUL_UPLOAD_MSG_WITH_TS.format(
+                    time_taken_for_download, time_taken_for_upload),
                 chat_id=update.message.chat.id,
                 message_id=update.message.message_id,
                 disable_web_page_preview=True
@@ -230,10 +221,7 @@ async def download_coroutine(bot, session, url, file_name, chat_id, message_id, 
         await bot.edit_message_text(
             chat_id,
             message_id,
-            text="""Initiating Download
-URL: {}
-File Size: {}""".format(url, humanbytes(total_length))
-        )
+            text="Initiating Download\nURL: {}\nFile Size: {}".format(url, humanbytes(total_length)))
         with open(file_name, "wb") as f_handle:
             while True:
                 chunk = await response.content.read(Config.CHUNK_SIZE)
@@ -251,23 +239,19 @@ File Size: {}""".format(url, humanbytes(total_length))
                         (total_length - downloaded) / speed) * 1000
                     estimated_total_time = elapsed_time + time_to_completion
                     try:
-                                                current_message = """**Download Status**
-URL: {}
-File Size: {}
-Downloaded: {}
-ETA: {}""".format(
+                        current_message = "**Download Status**\nURL: {}\nFile Size: {}\nDownloaded: {}\nETA: {}".format(
                             url,
                             humanbytes(total_length),
                             humanbytes(downloaded),
                             TimeFormatter(estimated_total_time)
                         )
-                                                if current_message != display_message:
-                                                    await bot.edit_message_text(
-                                                        chat_id,
-                                                        message_id,
-                                                        text=current_message
-                                                    )
-                                                    display_message = current_message
+                        if current_message != display_message:
+                            await bot.edit_message_text(
+                                chat_id,
+                                message_id,
+                                text=current_message
+                            )
+                            display_message = current_message
                     except Exception as e:
                         logger.info(str(e))
         return await response.release()

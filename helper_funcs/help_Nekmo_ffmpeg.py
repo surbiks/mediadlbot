@@ -2,15 +2,15 @@
 # -*- coding: utf-8 -*-
 # (c) Shrimadhav U K
 
-# the logging things
-from hachoir.parser import createParser
-from hachoir.metadata import extractMetadata
-import time
-import os
 import asyncio
 import logging
-logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+import os
+import time
+
+from hachoir.metadata import extractMetadata
+from hachoir.parser import createParser
+
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 
@@ -94,9 +94,8 @@ async def take_screen_shot(video_file, output_directory, ttl):
     else:
         return None
 
+
 # https://github.com/Nekmo/telegram-upload/blob/master/telegram_upload/video.py#L26
-
-
 async def cult_small_video(video_file, output_directory, start_time, end_time):
     # https://stackoverflow.com/a/13891070/4723940
     out_put_file_name = output_directory + \
@@ -131,14 +130,7 @@ async def cult_small_video(video_file, output_directory, start_time, end_time):
         return None
 
 
-async def generate_screen_shots(
-    video_file,
-    output_directory,
-    is_watermarkable,
-    wf,
-    min_duration,
-    no_of_photos
-):
+async def generate_screen_shots(video_file, output_directory, is_watermarkable, wf, min_duration, no_of_photos):
     metadata = extractMetadata(createParser(video_file))
     duration = 0
     if metadata is not None and metadata.has("duration"):

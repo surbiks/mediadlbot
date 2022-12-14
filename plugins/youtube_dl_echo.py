@@ -2,34 +2,24 @@
 # -*- coding: utf-8 -*-
 # (c) Shrimadhav U K | X-Noid | @DC4_WARRIOR
 
-# the logging things
+import asyncio
+import json
 import logging
-logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
-import requests, urllib.parse, filetype, os, time, shutil, tldextract, asyncio, json, math
-from PIL import Image
-# the secret configuration specific things
-if bool(os.environ.get("WEBHOOK", False)):
-    from config import Config
-else:
-    from config import Config
-# the Strings used for this "thing"
-from database.adduser import AddUser
-from translation import Translation
-logging.getLogger("pyrogram").setLevel(logging.WARNING)
-from pyrogram import filters
+
 from pyrogram import Client as Clinton
-from database.access import clinton
-from helper_funcs.display_progress import humanbytes
-from helper_funcs.help_uploadbot import DownLoadFile
-from helper_funcs.display_progress import progress_for_pyrogram, humanbytes, TimeFormatter
-from hachoir.metadata import extractMetadata
-from hachoir.parser import createParser
-from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
-from pyrogram.errors import UserNotParticipant
-        
-        
+from pyrogram import filters
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from database.adduser import AddUser
+from helper_funcs.display_progress import (humanbytes)
+from translation import Translation
+from config import Config
+
+
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+logging.getLogger("pyrogram").setLevel(logging.WARNING)
+
+
 @Clinton.on_message(filters.private & filters.regex(pattern=".*http.*"))
 async def echo(bot, update):
     await AddUser(bot, update)
@@ -114,7 +104,8 @@ async def echo(bot, update):
     # https://github.com/rg3/youtube-dl/issues/2630#issuecomment-38635239
     if e_response and "nonnumeric port" not in e_response:
         # logger.warn("Status : FAIL", exc.returncode, exc.output)
-        error_message = e_response.replace("please report this issue on https://yt-dl.org/bug . Make sure you are using the latest version; see  https://yt-dl.org/update  on how to update. Be sure to call youtube-dl with the --verbose flag and include its complete output.", "")
+        error_message = e_response.replace(
+            "please report this issue on https://yt-dl.org/bug . Make sure you are using the latest version; see  https://yt-dl.org/update  on how to update. Be sure to call youtube-dl with the --verbose flag and include its complete output.", "")
         if "This video is only available for registered users." in error_message:
             error_message += Translation.SET_CUSTOM_USERNAME_PASSWORD
         await bot.send_message(
@@ -242,7 +233,8 @@ async def echo(bot, update):
         await imog.delete(True)
         await bot.send_message(
             chat_id=update.chat.id,
-            text=Translation.FORMAT_SELECTION + "\n" + Translation.SET_CUSTOM_USERNAME_PASSWORD,
+            text=Translation.FORMAT_SELECTION + "\n" +
+            Translation.SET_CUSTOM_USERNAME_PASSWORD,
             reply_markup=reply_markup,
             parse_mode="html",
             reply_to_message_id=update.message_id

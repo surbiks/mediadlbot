@@ -2,28 +2,17 @@
 # -*- coding: utf-8 -*-
 # (c) Shrimadhav U K | Modifieded By : @DC4_WARRIOR
 
-# the logging things
 import logging
-logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
 
-import os
-import asyncio
-import sqlite3
-
-# the secret configuration specific things
-from config import Config
-
-# the Strings used for this "thing"
-from translation import Translation
 from pyrogram import Client as Clinton
 from pyrogram import filters
-from database.adduser import AddUser
-from pyrogram.types import Message
-logging.getLogger("pyrogram").setLevel(logging.WARNING)
-
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from database.adduser import AddUser
+from translation import Translation
+
+logging.basicConfig(level=logging.DEBUG,format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
 
 @Clinton.on_message(filters.private & filters.command(["help"]))
@@ -40,10 +29,10 @@ async def help_user(bot, update):
 
 @Clinton.on_message(filters.private & filters.command(["start"]))
 async def start(bot, message):
-  await bot.send_message(
-    chat_id=message.chat.id,
-    text=Translation.START_TEXT.format(message.from_user.mention),
-    reply_markup=InlineKeyboardMarkup(
+    await bot.send_message(
+        chat_id=message.chat.id,
+        text=Translation.START_TEXT.format(message.from_user.mention),
+        reply_markup=InlineKeyboardMarkup(
             [
                 [
                     InlineKeyboardButton("Comment", url="https://t.me/ansakubotchannel/1"),
@@ -51,5 +40,5 @@ async def start(bot, message):
                 ]
             ]
         ),
-    reply_to_message_id=message.message_id
-  )
+            reply_to_message_id=message.message_id
+        )

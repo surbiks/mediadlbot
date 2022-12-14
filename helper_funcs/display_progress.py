@@ -1,35 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# (c) Shrimadhav U K 
+# (c) Shrimadhav U K
 
-# the logging things
-import shutil
-import time
-import os
-import math
-from translation import Translation
 import logging
-logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+import math
+import time
+
+
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 
-# the secret configuration specific things
-if bool(os.environ.get("WEBHOOK", False)):
-    from config import Config
-else:
-    from config import Config
-
-# the Strings used for this "thing"
-
-
-async def progress_for_pyrogram(
-    current,
-    total,
-    ud_type,
-    message,
-    start
-):
+async def progress_for_pyrogram(current, total, ud_type, message, start):
     now = time.time()
     diff = now - start
     if round(diff % 10.00) == 0 or current == total:
