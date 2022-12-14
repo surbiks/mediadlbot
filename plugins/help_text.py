@@ -16,20 +16,19 @@ logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
 
 @Clinton.on_message(filters.private & filters.command(["help"]))
-async def help_user(bot, update):
-    await AddUser(bot, update)
-    await bot.send_message(
-        chat_id=update.chat.id,
+async def help_user(client, message):
+    await AddUser(client, message)
+    await client.send_message(
+        chat_id=message.chat.id,
         text=Translation.HELP_USER,
-        parse_mode="html",
         disable_web_page_preview=True,
-        reply_to_message_id=update.message_id
+        reply_to_message_id=message.id
     )
 
 
 @Clinton.on_message(filters.private & filters.command(["start"]))
-async def start(bot, message):
-    await bot.send_message(
+async def start(client, message):
+    await client.send_message(
         chat_id=message.chat.id,
         text=Translation.START_TEXT.format(message.from_user.mention),
         reply_markup=InlineKeyboardMarkup(
@@ -40,5 +39,5 @@ async def start(bot, message):
                 ]
             ]
         ),
-            reply_to_message_id=message.message_id
+            reply_to_message_id=message.id
         )

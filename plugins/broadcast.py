@@ -38,19 +38,19 @@ async def send_msg(user_id, message):
 
 
 @Clinton.on_message(filters.private & filters.command('broadcast') & filters.reply)
-async def broadcast_(c, m):
-    if m.from_user.id != Config.OWNER_ID:
+async def broadcast_(client, message):
+    if message.from_user.id != Config.OWNER_ID:
         return
 
     all_users = await clinton.get_all_users()
-    broadcast_msg = m.reply_to_message
+    broadcast_msg = message.reply_to_message
 
     while True:
         broadcast_id = ''.join([random.choice(string.ascii_letters) for i in range(3)])
         if not broadcast_ids.get(broadcast_id):
             break
 
-    out = await m.reply_text(text='Broadcast initiated! You will be notified with log file when all the users are notified.')
+    out = await message.reply_text(text='Broadcast initiated! You will be notified with log file when all the users are notified.')
 
     start_time = time.time()
     total_users = await clinton.total_users_count()
@@ -94,11 +94,11 @@ async def broadcast_(c, m):
     await out.delete()
 
     if failed == 0:
-        await m.reply_text(
+        await message.reply_text(
             text=f"broadcast completed in `{completed_in}`\n\nTotal users {total_users}.\nTotal done {done}, {success} success and {failed} failed.",
             quote=True)
     else:
-        await m.reply_document(
+        await message.reply_document(
             document='broadcast.txt',
             caption=f"broadcast completed in. `{completed_in}`\n\nTotal users {total_users}.\nTotal done {done}, {success} success and {failed} failed.",
             quote=True

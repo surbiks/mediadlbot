@@ -24,40 +24,39 @@ logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
 
 @Clinton.on_message(filters.private & filters.photo)
-async def save_photo(bot, update):
-    await AddUser(bot, update)
-    await clinton.set_thumbnail(update.from_user.id, thumbnail=update.photo.file_id)
-    await bot.send_message(chat_id=update.chat.id, text=Translation.SAVED_CUSTOM_THUMB_NAIL, reply_to_message_id=update.message_id)
+async def save_photo(client, message):
+    await AddUser(client, message)
+    await clinton.set_thumbnail(message.from_user.id, thumbnail=message.photo.file_id)
+    await client.send_message(chat_id=message.chat.id, text=Translation.SAVED_CUSTOM_THUMB_NAIL, reply_to_message_id=message.id)
 
 
 @Clinton.on_message(filters.private & filters.command("delthumbnail"))
-async def delthumbnail(bot, update):
-    await AddUser(bot, update)
-    await clinton.set_thumbnail(update.from_user.id, thumbnail=None)
-    await bot.send_message(chat_id=update.chat.id, text=Translation.DEL_ETED_CUSTOM_THUMB_NAIL, reply_to_message_id=update.message_id)
+async def delthumbnail(client, message):
+    await AddUser(client, message)
+    await clinton.set_thumbnail(message.from_user.id, thumbnail=None)
+    await client.send_message(chat_id=message.chat.id, text=Translation.DEL_ETED_CUSTOM_THUMB_NAIL, reply_to_message_id=message.id)
 
 
 @Clinton.on_message(filters.private & filters.command("viewthumbnail") )
-async def viewthumbnail(bot, update):
-    await AddUser(bot, update)
-    thumbnail = await clinton.get_thumbnail(update.from_user.id)
+async def viewthumbnail(client, message):
+    await AddUser(client, message)
+    thumbnail = await clinton.get_thumbnail(message.from_user.id)
     if thumbnail is not None:
-        await bot.send_photo(
-            chat_id=update.chat.id,
+        await client.send_photo(
+            chat_id=message.chat.id,
             photo=thumbnail,
             caption='Your current saved thumbnail 🦠',
-            reply_to_message_id=update.message_id,
+            reply_to_message_id=message.id
         )
-
     else:
-        await update.reply_text(text='No Thumbnail found 🤒')
+        await message.reply_text(text='No Thumbnail found 🤒')
 
 
-async def Gthumb01(bot, update):
-    thumb_image_path = Config.DOWNLOAD_LOCATION + "/" + str(update.from_user.id) + ".jpg"
-    db_thumbnail = await clinton.get_thumbnail(update.from_user.id)
+async def Gthumb01(client, callback_query):
+    thumb_image_path = Config.DOWNLOAD_LOCATION + "/" + str(callback_query.from_user.id) + ".jpg"
+    db_thumbnail = await clinton.get_thumbnail(callback_query.from_user.id)
     if db_thumbnail is not None:
-        thumbnail = await bot.download_media(message=db_thumbnail, file_name=thumb_image_path)
+        thumbnail = await client.download_media(message=db_thumbnail, file_name=thumb_image_path)
         Image.open(thumbnail).convert("RGB").save(thumbnail)
         img = Image.open(thumbnail)
         img.resize((100, 100))
@@ -67,19 +66,13 @@ async def Gthumb01(bot, update):
     return thumbnail
 
 
-async def Gthumb02(bot, update, duration, download_directory):
-    thumb_image_path = Config.DOWNLOAD_LOCATION + "/" + str(update.from_user.id) + ".jpg"
-    db_thumbnail = await clinton.get_thumbnail(update.from_user.id)
+async def Gthumb02(client, callback_query, duration, download_directory):
+    thumb_image_path = Config.DOWNLOAD_LOCATION + "/" + str(callback_query.from_user.id) + ".jpg"
+    db_thumbnail = await clinton.get_thumbnail(callback_query.from_user.id)
     return (
-        await bot.download_media(
-            message=db_thumbnail, file_name=thumb_image_path
-        )
+        await client.download_media(message=db_thumbnail, file_name=thumb_image_path)
         if db_thumbnail is not None
-        else await take_screen_shot(
-            download_directory,
-            os.path.dirname(download_directory),
-            random.randint(0, duration - 1),
-        )
+        else await take_screen_shot(download_directory, os.path.dirname(download_directory), random.randint(0, duration - 1))
     )
 
 

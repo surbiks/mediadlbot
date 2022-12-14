@@ -32,21 +32,11 @@ def DownLoadFile(url, file_name, chunk_size, client, ud_type, message_id, chat_i
             if chunk:
                 fd.write(chunk)
                 downloaded_size += chunk_size
-            if (
-                client is not None
-                and ((total_size // downloaded_size) % 5) == 0
-            ):
+            if (client is not None and ((total_size // downloaded_size) % 5) == 0 ):
                 time.sleep(0.3)
                 try:
-                    client.edit_message_text(
-                        chat_id,
-                        message_id,
-                        text="{}: {} of {}".format(
-                            ud_type,
-                            humanbytes(downloaded_size),
-                            humanbytes(total_size)
-                        )
-                    )
+                    text = "{}: {} of {}".format( ud_type, humanbytes(downloaded_size), humanbytes(total_size) )
+                    client.edit_message_text(chat_id, message_id, text=text)
                 except:
                     pass
     return file_name

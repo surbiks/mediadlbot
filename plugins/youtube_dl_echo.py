@@ -21,13 +21,13 @@ logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
 
 @Clinton.on_message(filters.private & filters.regex(pattern=".*http.*"))
-async def echo(bot, update):
-    await AddUser(bot, update)
-    imog = await update.reply_text("Processing...⚡", reply_to_message_id=update.message_id)
+async def echo(client, message):
+    await AddUser(client, message)
+    imog = await message.reply_text("Processing...⚡", reply_to_message_id=message.id)
     youtube_dl_username = None
     youtube_dl_password = None
     file_name = None
-    url = update.text
+    url = message.text
     if "|" in url:
         url_parts = url.split("|")
         if len(url_parts) == 2:
@@ -39,7 +39,7 @@ async def echo(bot, update):
             youtube_dl_username = url_parts[2]
             youtube_dl_password = url_parts[3]
         else:
-            for entity in update.entities:
+            for entity in message.entities:
                 if entity.type == "text_link":
                     url = entity.url
                 elif entity.type == "url":
@@ -58,7 +58,7 @@ async def echo(bot, update):
         logger.info(url)
         logger.info(file_name)
     else:
-        for entity in update.entities:
+        for entity in message.entities:
             if entity.type == "text_link":
                 url = entity.url
             elif entity.type == "url":
@@ -108,11 +108,10 @@ async def echo(bot, update):
             "please report this issue on https://yt-dl.org/bug . Make sure you are using the latest version; see  https://yt-dl.org/update  on how to update. Be sure to call youtube-dl with the --verbose flag and include its complete output.", "")
         if "This video is only available for registered users." in error_message:
             error_message += Translation.SET_CUSTOM_USERNAME_PASSWORD
-        await bot.send_message(
-            chat_id=update.chat.id,
+        await client.send_message(
+            chat_id=message.chat.id,
             text=Translation.NO_VOID_FORMAT_FOUND.format(str(error_message)),
-            reply_to_message_id=update.message_id,
-            parse_mode="html",
+            reply_to_message_id=message.id,
             disable_web_page_preview=True
         )
         return False
@@ -125,7 +124,7 @@ async def echo(bot, update):
             x_reponse, _ = x_reponse.split("\n")
         response_json = json.loads(x_reponse)
         save_ytdl_json_path = Config.DOWNLOAD_LOCATION + \
-            "/" + str(update.from_user.id) + ".json"
+            "/" + str(message.from_user.id) + ".json"
         with open(save_ytdl_json_path, "w", encoding="utf8") as outfile:
             json.dump(response_json, outfile, ensure_ascii=False)
         duration = response_json["duration"] if "duration" in response_json else None
@@ -231,13 +230,12 @@ async def echo(bot, update):
             ])
         reply_markup = InlineKeyboardMarkup(inline_keyboard)
         await imog.delete(True)
-        await bot.send_message(
-            chat_id=update.chat.id,
+        await client.send_message(
+            chat_id=message.chat.id,
             text=Translation.FORMAT_SELECTION + "\n" +
             Translation.SET_CUSTOM_USERNAME_PASSWORD,
             reply_markup=reply_markup,
-            parse_mode="html",
-            reply_to_message_id=update.message_id
+            reply_to_message_id=message.id
         )
     else:
         cb_string_file = "{}={}={}".format(
@@ -256,10 +254,9 @@ async def echo(bot, update):
         ])
         reply_markup = InlineKeyboardMarkup(inline_keyboard)
         await imog.delete(True)
-        await bot.send_message(
-            chat_id=update.chat.id,
+        await client.send_message(
+            chat_id=message.chat.id,
             text=Translation.FORMAT_SELECTION,
             reply_markup=reply_markup,
-            parse_mode="html",
-            reply_to_message_id=update.message_id
+            reply_to_message_id=message.id
         )

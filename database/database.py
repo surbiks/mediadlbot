@@ -6,7 +6,7 @@ db = peewee.SqliteDatabase(f"{Config.SESSION_NAME}.db")
 
 class Users(peewee.Model):
     id = peewee.IntegerField(primary_key=True)
-    thumbnail = peewee.CharField()
+    thumbnail = peewee.CharField(null=True)
     class Meta:
         database = db
 
@@ -19,7 +19,7 @@ class Database:
 
     async def add_user(self, id):
         if not await self.is_user_exist(id):
-            user = Users.create(id=id, thumbnail='')
+            user = Users.create(id=id, thumbnail=None)
             user.save()
 
 
