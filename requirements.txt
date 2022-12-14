@@ -6,5 +6,6 @@ yt-dlp
 hachoir
 Pillow
 requests
+pyrogram
 tgcrypto
 ffmpeg
