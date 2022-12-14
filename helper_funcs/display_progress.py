@@ -2,13 +2,8 @@
 # -*- coding: utf-8 -*-
 # (c) Shrimadhav U K
 
-import logging
 import math
 import time
-
-
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
 
 
 async def progress_for_pyrogram(current, total, ud_type, message, start):

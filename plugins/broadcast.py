@@ -39,6 +39,10 @@ async def send_msg(user_id, message):
 
 @Clinton.on_message(filters.private & filters.command('broadcast') & filters.reply)
 async def broadcast_(client, message):
+    if not await clinton.is_user_login(message.from_user.id):
+        await message.reply_text(text="first login to bot. /login")
+        return
+
     if message.from_user.id != Config.OWNER_ID:
         return
 

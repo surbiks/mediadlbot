@@ -3,15 +3,11 @@
 # (c) Shrimadhav U K
 
 import asyncio
-import logging
 import os
 import time
 
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
-
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
 
 
 async def place_water_mark(input_file, output_file, water_mark_file):

@@ -25,6 +25,10 @@ logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
 @Clinton.on_message(filters.private & filters.photo)
 async def save_photo(client, message):
+    if not await clinton.is_user_login(message.from_user.id):
+        await message.reply_text(text="first login to bot. /login")
+        return
+
     await AddUser(client, message)
     await clinton.set_thumbnail(message.from_user.id, thumbnail=message.photo.file_id)
     await client.send_message(chat_id=message.chat.id, text=Translation.SAVED_CUSTOM_THUMB_NAIL, reply_to_message_id=message.id)
@@ -32,6 +36,10 @@ async def save_photo(client, message):
 
 @Clinton.on_message(filters.private & filters.command("delthumbnail"))
 async def delthumbnail(client, message):
+    if not await clinton.is_user_login(message.from_user.id):
+        await message.reply_text(text="first login to bot. /login")
+        return
+
     await AddUser(client, message)
     await clinton.set_thumbnail(message.from_user.id, thumbnail=None)
     await client.send_message(chat_id=message.chat.id, text=Translation.DEL_ETED_CUSTOM_THUMB_NAIL, reply_to_message_id=message.id)
@@ -39,6 +47,10 @@ async def delthumbnail(client, message):
 
 @Clinton.on_message(filters.private & filters.command("viewthumbnail") )
 async def viewthumbnail(client, message):
+    if not await clinton.is_user_login(message.from_user.id):
+        await message.reply_text(text="first login to bot. /login")
+        return
+
     await AddUser(client, message)
     thumbnail = await clinton.get_thumbnail(message.from_user.id)
     if thumbnail is not None:

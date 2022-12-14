@@ -8,6 +8,7 @@ import logging
 
 from pyrogram import Client as Clinton
 from pyrogram import filters
+from database.access import clinton
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from database.adduser import AddUser
 from helper_funcs.display_progress import (humanbytes)
@@ -22,6 +23,10 @@ logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
 @Clinton.on_message(filters.private & filters.regex(pattern=".*http.*"))
 async def echo(client, message):
+    if not await clinton.is_user_login(message.from_user.id):
+        await message.reply_text(text="first login to bot. /login")
+        return
+
     await AddUser(client, message)
     imog = await message.reply_text("Processing...⚡", reply_to_message_id=message.id)
     youtube_dl_username = None

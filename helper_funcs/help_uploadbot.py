@@ -2,16 +2,11 @@
 # -*- coding: utf-8 -*-
 # (c) Shrimadhav U K
 
-import logging
 import os
 import requests
 import time
 
 from helper_funcs.display_progress import humanbytes
-
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
-
 
 def DetectFileSize(url):
     r = requests.get(url, allow_redirects=True, stream=True)
