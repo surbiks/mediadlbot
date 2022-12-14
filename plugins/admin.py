@@ -10,6 +10,8 @@ from database.access import clinton
 @Clinton.on_message(filters.private & filters.command('total'))
 async def sts(c, m):
     if m.from_user.id != Config.OWNER_ID:
+        await m.reply_text(text="permission denied !", quote=True)
         return
+
     total_users = await clinton.total_users_count()
     await m.reply_text(text=f"Total user(s) {total_users}", quote=True)

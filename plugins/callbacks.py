@@ -4,7 +4,7 @@ from pyrogram.types import (CallbackQuery, InlineKeyboardButton,InlineKeyboardMa
 from translation import Translation
 
 
-@kinu.on_callback_query()
+#@kinu.on_callback_query()
 async def cb_handler(client: kinu, query: CallbackQuery):
     if query.data == "help_kt":
         buttons = [[
