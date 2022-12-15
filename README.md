@@ -18,6 +18,8 @@ Telegram Bot Upload Media Files|video To telegram using direct download link. (y
 • Remove depended to mongodb (use sqlite as database)
 ```
 
+to use authentication feature set `BOT_PASS` in `.env` file, but if you want use as public bot need to set `PUBLIC_USE` to `True` in `.env` file.
+
 ## Deploy 🚀
 
 ### local host
