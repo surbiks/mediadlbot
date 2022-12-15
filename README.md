@@ -13,7 +13,7 @@ Telegram Bot Upload Media Files|video To telegram using direct download link. (y
 
 • Permanent thumbnail support
 
-• Allow authentic user with password or public use for all
+• Allow authentication user with password or public use for all
 
 • Remove depended to mongodb (use sqlite as database)
 ```
