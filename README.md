@@ -1,47 +1,48 @@
-## All Media Downloader Bot ❤️
+## MediaDlBot ❤️
 
-Bot Telegram sederhana, Unggah File Media| video Ke telegram menggunakan tautan unduhan langsung. (youtube, facebook, google drive, twitter, dll)
+Telegram Bot Upload Media Files|video To telegram using direct download link. (youtube, facebook, google drive, twitter, etc).
 
-## Fitur ✨
+## Feature ✨
 
 ```
-• Unggah HTTP/HTTPS sebagai File/Video ke Telegram.
+• Upload HTTP/HTTPS as File/Video to Telegram.
 
-• Unggah zee5, sony.live, voot, dan banyak lagi 
+• Upload zee5, sony.live, voot and more
 
-• Pesan siaran, periksa total pengguna
+• Broadcast messages, check total users
 
-• Dukungan thumbnail permanen
+• Permanent thumbnail support
+
+• Allow authentic user with password or public use for all
+
+• Remove depended to mongodb (use sqlite as database)
 ```
-
-## Demo Bot 
-
-<a href="https://t.me/allmediadwnlderbot"><img src="https://img.shields.io/badge/Demo_Bot-2cb6e0?style=for-the-badge&logo=telegram&logoColor=white"></a>
-
 
 ## Deploy 🚀
 
-### Heroku Deploy 
-
-[![Deploy On Heroku](https://img.shields.io/badge/heroku-%23430098.svg?style=for-the-badge&logo=heroku&logoColor=white)](https://heroku.com/deploy?template=https://github.com/Ansaku/All-Media-Downloader)
-
-### Lokal Host 
-
+### local host
 ```shell
-git clone https://github.com/Ansaku/All-Media-Downloader
-cd All-Media-Downloader
+git clone https://github.com/surbiks/mediadlbot
+cd mediadlbot
 pip3 install -r requirements.txt
-# EDIT sample_config.py dengan tepat
-python3 main.py
+cp sample.env .env
+#edit .env file and set configs
+python3 bot.py
 ```
 
-## Situs Dukungan 
-
-   **[YouTube-dl Supported Links](https://ytdl-org.github.io/youtube-dl/supportedsites.html)**
+### docker 
+```shell
+git clone https://github.com/surbiks/mediadlbot
+cd mediadlbot
+docker build -t mediadlbot:latest .
+cp sample.env .env
+#edit .env file and set configs
+docker run -d --name mediadlbot --restart always -v $(pwd):/opt/app/ mediadlbot:latest
+```
 
 ## Issues 
 
-   **[Submit Issues](https://github.com/Ansaku/All-Media-Downloader/issues)**
+   **[Submit Issues](https://github.com/surbiks/mediadlbot/issues)**
 
 
 ## Credits, and Thanks to 
