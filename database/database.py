@@ -30,6 +30,11 @@ class Database:
     async def is_user_login(self, id):
         await self.add_user(id=id)
         
+        # bot owner no need authentication
+        if int(id) == int(Config.OWNER_ID):
+            return True
+        
+        # if use as public use no need authentication
         if Config.PUBLIC_USE:
             return True
 
